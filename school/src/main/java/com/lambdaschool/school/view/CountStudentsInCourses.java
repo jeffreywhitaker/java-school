@@ -4,5 +4,5 @@ public interface CountStudentsInCourses
 {
     long getCourseid();
     String getCoursename();
-    long getCountstudents();
+    long getCountstudentszzz();
 }
