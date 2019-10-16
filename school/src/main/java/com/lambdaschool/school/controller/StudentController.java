@@ -1,8 +1,14 @@
 package com.lambdaschool.school.controller;
 
+import com.lambdaschool.school.model.Course;
 import com.lambdaschool.school.model.Student;
 import com.lambdaschool.school.service.StudentService;
+import io.swagger.annotations.ApiImplicitParam;
+import io.swagger.annotations.ApiImplicitParams;
+import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -22,11 +28,14 @@ public class StudentController
     private StudentService studentService;
 
     // Please note there is no way to add students to course yet!
-
+    @ApiOperation(value = "returns all Students", response = Student.class, responseContainer = "ArrayList")
+    @ApiImplicitParams({@ApiImplicitParam(name = "page", dataType = "integer", paramType = "query", value = "Results page, 0 to N"), @ApiImplicitParam(name = "size", dataType = "integer", paramType = "query", value = "Number of records per page."),
+                               @ApiImplicitParam(name = "sort", allowMultiple = true, dataType = "string", paramType = "query", value = "Sorting criteria in format: property(,asc|desc)." + "Default sort is ascending." + "Multiple sort criteria are supported")})
     @GetMapping(value = "/students", produces = {"application/json"})
-    public ResponseEntity<?> listAllStudents()
+    public ResponseEntity<?> listAllStudents(@PageableDefault(page = 0, size = 5)
+                                                         Pageable pageable)
     {
-        List<Student> myStudents = studentService.findAll();
+        List<Student> myStudents = studentService.findAllPageable(pageable);
         return new ResponseEntity<>(myStudents, HttpStatus.OK);
     }
 
