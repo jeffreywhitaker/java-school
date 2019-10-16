@@ -40,6 +40,13 @@ public class CourseServiceImpl implements CourseService
         return courserepos.getCountStudentsInCourse();
     }
 
+    @Override
+    public Course findCourseById(long id) throws ResourceNotFoundException
+    {
+        return courserepos.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException(Long.toString(id)));
+    }
+
     @Transactional
     @Override
     public void delete(long id) throws ResourceNotFoundException
