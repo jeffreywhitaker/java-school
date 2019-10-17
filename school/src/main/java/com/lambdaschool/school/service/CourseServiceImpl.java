@@ -2,6 +2,7 @@ package com.lambdaschool.school.service;
 
 import com.lambdaschool.school.exceptions.ResourceNotFoundException;
 import com.lambdaschool.school.model.Course;
+import com.lambdaschool.school.model.Student;
 import com.lambdaschool.school.repository.CourseRepository;
 import com.lambdaschool.school.view.CountStudentsInCourses;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,6 +12,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.EntityNotFoundException;
 import java.util.ArrayList;
+import java.util.List;
 
 @Service(value = "courseService")
 public class CourseServiceImpl implements CourseService
@@ -19,7 +21,7 @@ public class CourseServiceImpl implements CourseService
     private CourseRepository courserepos;
 
     @Override
-    public ArrayList<Course> findAll()
+    public List<Course> findAll()
     {
         ArrayList<Course> list = new ArrayList<>();
         courserepos.findAll().iterator().forEachRemaining(list::add);
@@ -27,7 +29,7 @@ public class CourseServiceImpl implements CourseService
     }
 
     @Override
-    public ArrayList<Course> findAllPageable(Pageable pageable)
+    public List<Course> findAllPageable(Pageable pageable)
     {
         ArrayList<Course> list = new ArrayList<>();
         courserepos.findAll(pageable).iterator().forEachRemaining(list::add);
@@ -35,7 +37,7 @@ public class CourseServiceImpl implements CourseService
     }
 
     @Override
-    public ArrayList<CountStudentsInCourses> getCountStudentsInCourse()
+    public List<CountStudentsInCourses> getCountStudentsInCourse()
     {
         return courserepos.getCountStudentsInCourse();
     }
@@ -59,5 +61,17 @@ public class CourseServiceImpl implements CourseService
         {
             throw new ResourceNotFoundException(Long.toString(id));
         }
+    }
+
+    @Transactional
+    @Override
+    public Course save(Course course)
+    {
+        Course newCourse = new Course();
+
+        newCourse.setCoursename(course.getCoursename());
+        newCourse.setInstructor(course.getInstructor());
+
+        return courserepos.save(newCourse);
     }
 }

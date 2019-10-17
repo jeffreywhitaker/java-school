@@ -22,9 +22,9 @@ public class Course
     private String coursename;
 
     @ApiModelProperty(name = "instructor", value = "course instructor", required = true, example = "John Mitchell")
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "instructid")
-    @JsonIgnoreProperties("courses")
+    @JsonIgnoreProperties({"courses", "hibernateLazyInitializer"})
     private Instructor instructor;
 
     @ApiModelProperty(name = "students", value = "students in course")

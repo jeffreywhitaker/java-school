@@ -22,7 +22,8 @@ public class Instructor
     private String instructname;
 
     @ApiModelProperty(name = "courses", value = "List of courses")
-    @OneToMany(mappedBy = "instructor")
+    @OneToMany(mappedBy = "instructor",
+               cascade = CascadeType.ALL)
     @JsonIgnoreProperties("instructors")
     private List<Course> courses = new ArrayList<>();
 

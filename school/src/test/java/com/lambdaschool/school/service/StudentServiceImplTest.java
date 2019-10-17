@@ -1,4 +1,4 @@
-package com.lambdaschool.school.services;
+package com.lambdaschool.school.service;
 
 import org.junit.After;
 import org.junit.Before;

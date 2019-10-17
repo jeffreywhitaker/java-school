@@ -1,6 +1,9 @@
 package com.lambdaschool.school.service;
 
-import com.lambdaschool.school.SchoolApplicationTests;
+import com.lambdaschool.school.SchoolApplication;
+import com.lambdaschool.school.exceptions.ResourceNotFoundException;
+import com.lambdaschool.school.model.Course;
+import com.lambdaschool.school.model.Instructor;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.FixMethodOrder;
@@ -12,10 +15,13 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringRunner;
 
+import javax.persistence.EntityNotFoundException;
+
+import static junit.framework.TestCase.assertEquals;
 import static org.junit.Assert.*;
 
 @RunWith(SpringRunner.class)
-@SpringBootTest(classes = SchoolApplicationTests.class)
+@SpringBootTest(classes = SchoolApplication.class)
 @FixMethodOrder(MethodSorters.NAME_ASCENDING)
 public class CourseServiceImplTest
 {
@@ -54,8 +60,37 @@ public class CourseServiceImplTest
         assertEquals("T Data Science", courseService.findCourseById(1).getCoursename());
     }
 
+    @Test (expected = ResourceNotFoundException.class)
+    public void FdeleteNotFound()
+    {
+        courseService.delete(100);
+        assertEquals(6, courseService.findAll().size());
+    }
+
+
+    @Test
+    public void GdeleteFound()
+    {
+        courseService.delete(6);
+        assertEquals(5, courseService.findAll().size());
+    }
+
     @Test
     public void Gdelete()
     {
+    }
+
+    @Test
+    public void save()
+    {
+        Course c1 = new Course("T Course");
+
+        Course addCourse = courseService.save(c1);
+
+        assertNotNull(addCourse);
+
+        Course foundCourse = courseService.findCourseById(addCourse.getCourseid());
+
+        assertEquals(addCourse.getCoursename(), foundCourse.getCoursename());
     }
 }
